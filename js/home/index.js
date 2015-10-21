@@ -70,7 +70,6 @@ function updateWorkerMaze(maze) {
     mazeInit = false;
     worker.postMessage({command: 'maze', maze});
     worker.onmessage = function(e) {
-        console.log(e)
         mazeInit = true;
     };
 }
