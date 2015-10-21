@@ -1,13 +1,9 @@
 import 'babel/polyfill';
 import {
-    binaryTree,
     backtracker,
     greedyBacktracker,
-    gen_randomBinaryTree,
-    gen_randomBacktracker,
     kruskal,
-    gen_kruskal,
-    dijkstra,
+    binaryTree,
     gen_dijkstra
 } from './maze';
 
@@ -22,12 +18,10 @@ self.addEventListener('message', function(e) {
     switch(d.command) {
         case 'maze':
             maze = methods[d.maze.index](d.maze.numX, d.maze.numY);
+            self.postMessage(true);
             break;
         case 'generator':
             generator = gen_dijkstra(maze, d.pathStart);
-            break;
-        case 'path':
-            self.postMessage(dijkstra(maze, d.pathStart));
             break;
         case 'fill':
             var i = d.steps;

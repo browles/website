@@ -5,20 +5,11 @@ import {
     cubehelix
 } from './color';
 
-import {
-    binaryTree,
-    backtracker,
-    greedyBacktracker,
-    kruskal,
-    dijkstra
-} from './maze';
-
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var w, h, squareWidth, invSquareWidth, numX, numY, scale;
 
-var methods = [backtracker, greedyBacktracker, kruskal, binaryTree];
 var scales = [2.5, 3.5, 7.5, 10];
 
 var numColors = 800;
@@ -59,7 +50,7 @@ function colorMaze(distances, t) {
             // ctx.fillRect(x, y, squareWidth-1, squareWidth-1);
             ctx.lineWidth = 1;
             ctx.strokeStyle = c;
-            ctx.strokeRect(x, y, squareWidth-1, squareWidth-1);
+            ctx.strokeRect(x, y, squareWidth - 1, squareWidth - 1);
         }
     }
 }
@@ -74,8 +65,14 @@ function getNextDistances(steps) {
     });
 }
 
+var mazeInit = false;
 function updateWorkerMaze(maze) {
+    mazeInit = false;
     worker.postMessage({command: 'maze', maze});
+    worker.onmessage = function(e) {
+        console.log(e)
+        mazeInit = true;
+    };
 }
 
 function updateColorGenerator(pathStart) {
@@ -116,7 +113,7 @@ var fill = _.throttle(function (t) {
 
 var loopId;
 function drawFrame(t) {
-    getNextDistances(numX * numY / 200 | 0).then(function(result) {
+    if (mazeInit) getNextDistances(numX * numY / 200 | 0).then(function(result) {
         if (result) [distances, ] = result;
     });
 
@@ -141,14 +138,14 @@ function init() {
     numX = Math.ceil(w * invSquareWidth);
     numY = Math.ceil(h * invSquareWidth);
 
-    var randomMethodIndex = Math.random() * methods.length | 0;
+    var index = Math.random() * 4 | 0;
 
-    scale = scales[randomMethodIndex] * 1 / numX * numY;
+    scale = scales[index] * 1 / numX * numY;
 
     canvas.width = w;
     canvas.height = h;
 
-    updateWorkerMaze({index: randomMethodIndex, numX, numY});
+    updateWorkerMaze({index, numX, numY});
     updateColorGenerator(Math.random() * numX * numY | 0);
 
     drawFrame(0);
