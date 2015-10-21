@@ -144,6 +144,8 @@ function init() {
 
     canvas.width = w;
     canvas.height = h;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
 
     updateWorkerMaze({index, numX, numY});
     updateColorGenerator(Math.random() * numX * numY | 0);
