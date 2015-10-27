@@ -4,7 +4,7 @@ var fs = require('fs');
 function generatePages() {
     console.log('generate.js');
     var template = fs.readFileSync(path.join(__dirname, 'public', 'index.html'));
-    var dirs = ['fan', 'gestures', 'ribbon', 'scroll', 'toss'];
+    var dirs = ['fan', 'gestures', 'ribbon', 'endlessscroll', 'bouncescroll', 'toss'];
 
     dirs.forEach(function(name) {
         console.log('generated:', path.join('public', 'labs', name, 'index.html'));
