@@ -126,12 +126,16 @@ window.onresize = _.debounce(function() {
     init();
 }, 200);
 
-
 function init() {
     w = window.innerWidth;
     h = window.innerHeight;
 
     squareWidth = Math.max(w, h) / 60 | 0;
+    if (w < 900) {
+        squareWidth *= 1.5;
+    }
+    squareWidth += (w % squareWidth) / (w / squareWidth | 0);
+
     invSquareWidth = 1 / squareWidth;
 
     numX = Math.ceil(w * invSquareWidth);
