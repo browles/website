@@ -20,18 +20,21 @@ then
 fi
 
 # Let's Encrypt
-if [ ! -f /usr/bin/certbot-auto ]
+if [ ! -f /usr/bin/certbot ]
 then
-    sudo wget https://dl.eff.org/certbot-auto
-    sudo chmod a+x certbot-auto
-    sudo mv certbot-auto /usr/bin
+    sudo apt-get update
+    sudo apt-get install software-properties-common
+    sudo add-apt-repository universe
+    sudo add-apt-repository ppa:certbot/certbot
+    sudo apt-get update
+    sudo apt-get install certbot python-certbot-nginx
 fi
 
 if [ ! -f /etc/systemd/system/certbot.service ]
 then
-    sudo certbot-auto --nginx -d benrowles.com -d www.benrowles.com
+    sudo certbot --nginx -d benrowles.com -d www.benrowles.com
     sudo cp systemd/* /etc/systemd/system
-    # sudo systemctl enable certbot.timer
+    sudo systemctl enable certbot
 fi
 
 # Restart nginx
